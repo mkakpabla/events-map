@@ -4,13 +4,13 @@ from pathlib import Path
 # Ajoute api/ au sys.path pour que les tests trouvent les modules (models, database...)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from unittest.mock import MagicMock
+
 import pytest
 import pytest_asyncio
-from unittest.mock import MagicMock
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 
 from tests.helpers import AsyncIter  # noqa: F401 — réexporté pour les sous-modules
-
 
 # ---------------------------------------------------------------------------
 # Fixture — client HTTP branché sur l'app FastAPI sans MongoDB réel

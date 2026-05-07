@@ -2,8 +2,9 @@ from datetime import date as Date
 
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException, Query, status
+
 from database import get_database
-from models import EventCreate, EventOut, EventUpdate, EventType, doc_to_event, event_to_doc
+from models import EventCreate, EventOut, EventType, EventUpdate, doc_to_event, event_to_doc
 
 router = APIRouter(prefix="/events", tags=["events"])
 

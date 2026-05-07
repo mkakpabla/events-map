@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from database import connect_db, close_db
+from database import close_db, connect_db
 from routes.events import router as events_router
 
 # Dossier des images téléchargées par le scraper

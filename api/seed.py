@@ -5,7 +5,9 @@ Usage :  python seed.py [--clear]
 
 import asyncio
 import sys
+
 from motor.motor_asyncio import AsyncIOMotorClient
+
 from config import settings
 
 # ---------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 """Tests fonctionnels — routes/events.py."""
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 from bson import ObjectId
 
 from tests.helpers import AsyncIter

@@ -1,6 +1,7 @@
 """Tests unitaires — modèles Pydantic, enums et helpers de conversion."""
-import pytest
 from datetime import date
+
+import pytest
 from bson import ObjectId
 
 from models import (

@@ -4,7 +4,6 @@ from enum import Enum
 from bson import ObjectId
 from pydantic import BaseModel, Field, field_validator
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
