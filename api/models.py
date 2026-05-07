@@ -1,9 +1,8 @@
 from datetime import date as Date
 from enum import Enum
-from typing import Annotated, Any
 
 from bson import ObjectId
-from pydantic import BaseModel, Field, field_validator, model_serializer
+from pydantic import BaseModel, Field, field_validator
 
 
 # ---------------------------------------------------------------------------
