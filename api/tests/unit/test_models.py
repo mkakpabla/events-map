@@ -1,4 +1,5 @@
 """Tests unitaires — modèles Pydantic, enums et helpers de conversion."""
+
 from datetime import date
 
 import pytest
@@ -56,6 +57,7 @@ def valid_event_payload(**kwargs) -> dict:
 # PyObjectId
 # ---------------------------------------------------------------------------
 
+
 class TestPyObjectId:
     def test_valid_string(self):
         assert PyObjectId.validate(VALID_OID) == VALID_OID
@@ -88,6 +90,7 @@ class TestPyObjectId:
 # ---------------------------------------------------------------------------
 # GeoPoint
 # ---------------------------------------------------------------------------
+
 
 class TestGeoPoint:
     def test_valid_coordinates(self):
@@ -144,10 +147,19 @@ class TestGeoPoint:
 # EventType
 # ---------------------------------------------------------------------------
 
+
 class TestEventType:
-    @pytest.mark.parametrize("value", [
-        "concert", "sport", "conference", "expo", "soiree", "festival",
-    ])
+    @pytest.mark.parametrize(
+        "value",
+        [
+            "concert",
+            "sport",
+            "conference",
+            "expo",
+            "soiree",
+            "festival",
+        ],
+    )
     def test_all_valid_types(self, value):
         et = EventType(value)
         assert et.value == value
@@ -164,6 +176,7 @@ class TestEventType:
 # ---------------------------------------------------------------------------
 # EventCreate
 # ---------------------------------------------------------------------------
+
 
 class TestEventCreate:
     def test_valid_event(self):
@@ -230,6 +243,7 @@ class TestEventCreate:
 # EventUpdate
 # ---------------------------------------------------------------------------
 
+
 class TestEventUpdate:
     def test_empty_update_all_none(self):
         ev = EventUpdate()
@@ -270,6 +284,7 @@ class TestEventUpdate:
 # EventOut
 # ---------------------------------------------------------------------------
 
+
 class TestEventOut:
     def test_construct_from_doc(self):
         data = doc_to_event(sample_doc())
@@ -287,6 +302,7 @@ class TestEventOut:
 # ---------------------------------------------------------------------------
 # doc_to_event
 # ---------------------------------------------------------------------------
+
 
 class TestDocToEvent:
     def test_id_converted_to_string(self):
@@ -336,6 +352,7 @@ class TestDocToEvent:
 # ---------------------------------------------------------------------------
 # event_to_doc
 # ---------------------------------------------------------------------------
+
 
 class TestEventToDoc:
     def _make_event(self, **kwargs):

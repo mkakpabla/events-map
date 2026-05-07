@@ -16,6 +16,7 @@ from tests.helpers import AsyncIter  # noqa: F401 — réexporté pour les sous-
 # Fixture — client HTTP branché sur l'app FastAPI sans MongoDB réel
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(scope="session")
 def anyio_backend():
     return "asyncio"
@@ -31,8 +32,5 @@ async def client():
 
     from main import app
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
-

@@ -18,6 +18,7 @@ STATIC_DIR.mkdir(parents=True, exist_ok=True)
 # Lifespan (démarrage / arrêt)
 # ---------------------------------------------------------------------------
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect_db()

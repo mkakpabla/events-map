@@ -13,13 +13,16 @@ router = APIRouter(prefix="/events", tags=["events"])
 # GET /events — liste avec filtres dynamiques
 # ---------------------------------------------------------------------------
 
+
 @router.get("/", response_model=list[EventOut])
 async def list_events(
-    type:       EventType | None = Query(None,  description="Filtrer par type"),
-    date_from:  Date      | None = Query(None,  alias="dateFrom", description="Date de début (YYYY-MM-DD)"),
-    date_to:    Date      | None = Query(None,  alias="dateTo",   description="Date de fin  (YYYY-MM-DD)"),
-    limit:      int             = Query(100, ge=1, le=500),
-    skip:       int             = Query(0,   ge=0),
+    type: EventType | None = Query(None, description="Filtrer par type"),
+    date_from: Date | None = Query(
+        None, alias="dateFrom", description="Date de début (YYYY-MM-DD)"
+    ),
+    date_to: Date | None = Query(None, alias="dateTo", description="Date de fin  (YYYY-MM-DD)"),
+    limit: int = Query(100, ge=1, le=500),
+    skip: int = Query(0, ge=0),
 ):
     db = get_database()
     query: dict = {}
@@ -43,15 +46,16 @@ async def list_events(
 # GET /events/nearby — recherche par proximité
 # ---------------------------------------------------------------------------
 
+
 @router.get("/nearby", response_model=list[dict])
 async def get_nearby(
-    lat:    float       = Query(..., ge=-90,   le=90,   description="Latitude du centre"),
-    lng:    float       = Query(..., ge=-180,  le=180,  description="Longitude du centre"),
-    radius: float       = Query(5.0, gt=0,    le=20000, description="Rayon en kilomètres"),
-    type:   EventType | None = Query(None,  description="Filtrer par type"),
-    date_from: Date   | None = Query(None,  alias="dateFrom"),
-    date_to:   Date   | None = Query(None,  alias="dateTo"),
-    limit:  int             = Query(50, ge=1, le=500),
+    lat: float = Query(..., ge=-90, le=90, description="Latitude du centre"),
+    lng: float = Query(..., ge=-180, le=180, description="Longitude du centre"),
+    radius: float = Query(5.0, gt=0, le=20000, description="Rayon en kilomètres"),
+    type: EventType | None = Query(None, description="Filtrer par type"),
+    date_from: Date | None = Query(None, alias="dateFrom"),
+    date_to: Date | None = Query(None, alias="dateTo"),
+    limit: int = Query(50, ge=1, le=500),
 ):
     db = get_database()
 
@@ -59,7 +63,7 @@ async def get_nearby(
         "location": {
             "$nearSphere": {
                 "$geometry": {"type": "Point", "coordinates": [lng, lat]},
-                "$maxDistance": int(radius * 1000),   # mètres
+                "$maxDistance": int(radius * 1000),  # mètres
             }
         }
     }
@@ -89,6 +93,7 @@ async def get_nearby(
 # GET /events/{id}
 # ---------------------------------------------------------------------------
 
+
 @router.get("/{event_id}", response_model=EventOut)
 async def get_event(event_id: str):
     if not ObjectId.is_valid(event_id):
@@ -107,6 +112,7 @@ async def get_event(event_id: str):
 # POST /events
 # ---------------------------------------------------------------------------
 
+
 @router.post("/", response_model=EventOut, status_code=status.HTTP_201_CREATED)
 async def create_event(event: EventCreate):
     db = get_database()
@@ -119,6 +125,7 @@ async def create_event(event: EventCreate):
 # ---------------------------------------------------------------------------
 # PATCH /events/{id}
 # ---------------------------------------------------------------------------
+
 
 @router.patch("/{event_id}", response_model=EventOut)
 async def update_event(event_id: str, payload: EventUpdate):
@@ -171,6 +178,7 @@ async def update_event(event_id: str, payload: EventUpdate):
 # ---------------------------------------------------------------------------
 # DELETE /events/{id}
 # ---------------------------------------------------------------------------
+
 
 @router.delete("/{event_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_event(event_id: str):

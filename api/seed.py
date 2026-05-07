@@ -144,6 +144,7 @@ EVENTS = [
 
 # ---------------------------------------------------------------------------
 
+
 async def seed(clear: bool = False) -> None:
     client = AsyncIOMotorClient(settings.MONGO_URI)
     db = client[settings.MONGO_DB]

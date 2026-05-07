@@ -1,4 +1,5 @@
 """Tests fonctionnels — routes/events.py."""
+
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -7,7 +8,7 @@ from bson import ObjectId
 from tests.helpers import AsyncIter
 
 SAMPLE_OID = "507f1f77bcf86cd799439011"
-OTHER_OID  = "617f1f77bcf86cd799439022"
+OTHER_OID = "617f1f77bcf86cd799439022"
 
 SAMPLE_DOC = {
     "_id": ObjectId(SAMPLE_OID),
@@ -48,6 +49,7 @@ BASE_PAYLOAD = {
 # GET /api/v1/events/
 # ---------------------------------------------------------------------------
 
+
 class TestListEvents:
     @pytest.mark.anyio
     async def test_empty_collection(self, client):
@@ -60,9 +62,7 @@ class TestListEvents:
     @pytest.mark.anyio
     async def test_returns_all_events(self, client):
         with patch("routes.events.get_database") as m:
-            m.return_value["events"].find.return_value = AsyncIter(
-                [SAMPLE_DOC, CONCERT_DOC]
-            )
+            m.return_value["events"].find.return_value = AsyncIter([SAMPLE_DOC, CONCERT_DOC])
             r = await client.get("/api/v1/events/")
         assert r.status_code == 200
         assert len(r.json()) == 2
@@ -135,6 +135,7 @@ class TestListEvents:
 # GET /api/v1/events/nearby
 # ---------------------------------------------------------------------------
 
+
 class TestNearbyEvents:
     @pytest.mark.anyio
     async def test_requires_lat(self, client):
@@ -166,9 +167,7 @@ class TestNearbyEvents:
     async def test_with_type_filter(self, client):
         with patch("routes.events.get_database") as m:
             m.return_value["events"].find.return_value = AsyncIter([CONCERT_DOC])
-            r = await client.get(
-                "/api/v1/events/nearby?lat=48.85&lng=2.35&type=concert"
-            )
+            r = await client.get("/api/v1/events/nearby?lat=48.85&lng=2.35&type=concert")
         assert r.status_code == 200
         call_args = m.return_value["events"].find.call_args[0][0]
         assert call_args.get("type") == "concert"
@@ -191,6 +190,7 @@ class TestNearbyEvents:
 # ---------------------------------------------------------------------------
 # GET /api/v1/events/{id}
 # ---------------------------------------------------------------------------
+
 
 class TestGetEventById:
     @pytest.mark.anyio
@@ -234,6 +234,7 @@ class TestGetEventById:
 # ---------------------------------------------------------------------------
 # POST /api/v1/events/
 # ---------------------------------------------------------------------------
+
 
 class TestCreateEvent:
     @pytest.mark.anyio
@@ -288,6 +289,7 @@ class TestCreateEvent:
 # PATCH /api/v1/events/{id}
 # ---------------------------------------------------------------------------
 
+
 class TestUpdateEvent:
     @pytest.mark.anyio
     async def test_invalid_id_returns_400(self, client):
@@ -302,25 +304,17 @@ class TestUpdateEvent:
     @pytest.mark.anyio
     async def test_not_found_returns_404(self, client):
         with patch("routes.events.get_database") as m:
-            m.return_value["events"].update_one = AsyncMock(
-                return_value=MagicMock(matched_count=0)
-            )
-            r = await client.patch(
-                f"/api/v1/events/{SAMPLE_OID}", json={"name": "Nouveau nom"}
-            )
+            m.return_value["events"].update_one = AsyncMock(return_value=MagicMock(matched_count=0))
+            r = await client.patch(f"/api/v1/events/{SAMPLE_OID}", json={"name": "Nouveau nom"})
         assert r.status_code == 404
 
     @pytest.mark.anyio
     async def test_successful_update_returns_200(self, client):
         updated_doc = {**SAMPLE_DOC, "name": "Nouveau nom"}
         with patch("routes.events.get_database") as m:
-            m.return_value["events"].update_one = AsyncMock(
-                return_value=MagicMock(matched_count=1)
-            )
+            m.return_value["events"].update_one = AsyncMock(return_value=MagicMock(matched_count=1))
             m.return_value["events"].find_one = AsyncMock(return_value=updated_doc)
-            r = await client.patch(
-                f"/api/v1/events/{SAMPLE_OID}", json={"name": "Nouveau nom"}
-            )
+            r = await client.patch(f"/api/v1/events/{SAMPLE_OID}", json={"name": "Nouveau nom"})
         assert r.status_code == 200
         assert r.json()["name"] == "Nouveau nom"
 
@@ -334,6 +328,7 @@ class TestUpdateEvent:
 # DELETE /api/v1/events/{id}
 # ---------------------------------------------------------------------------
 
+
 class TestDeleteEvent:
     @pytest.mark.anyio
     async def test_invalid_id_returns_400(self, client):
@@ -343,26 +338,20 @@ class TestDeleteEvent:
     @pytest.mark.anyio
     async def test_not_found_returns_404(self, client):
         with patch("routes.events.get_database") as m:
-            m.return_value["events"].delete_one = AsyncMock(
-                return_value=MagicMock(deleted_count=0)
-            )
+            m.return_value["events"].delete_one = AsyncMock(return_value=MagicMock(deleted_count=0))
             r = await client.delete(f"/api/v1/events/{SAMPLE_OID}")
         assert r.status_code == 404
 
     @pytest.mark.anyio
     async def test_successful_delete_returns_204(self, client):
         with patch("routes.events.get_database") as m:
-            m.return_value["events"].delete_one = AsyncMock(
-                return_value=MagicMock(deleted_count=1)
-            )
+            m.return_value["events"].delete_one = AsyncMock(return_value=MagicMock(deleted_count=1))
             r = await client.delete(f"/api/v1/events/{SAMPLE_OID}")
         assert r.status_code == 204
 
     @pytest.mark.anyio
     async def test_successful_delete_has_no_body(self, client):
         with patch("routes.events.get_database") as m:
-            m.return_value["events"].delete_one = AsyncMock(
-                return_value=MagicMock(deleted_count=1)
-            )
+            m.return_value["events"].delete_one = AsyncMock(return_value=MagicMock(deleted_count=1))
             r = await client.delete(f"/api/v1/events/{SAMPLE_OID}")
         assert r.content == b""
