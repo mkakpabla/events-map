@@ -1,0 +1,50 @@
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    volumes:
+      - db:/data/db
+
+  compass:
+    image: haohanyang/compass-web
+    ports:
+      - "8080:8080"
+    environment:
+      - CW_MONGO_URI=mongodb://user:pass@mongodb:27017/
+      - CW_ENABLE_SHELL=true
+      - CW_MASTER_PASSWORD=pass
+    depends_on:
+      - mongodb
+
+  api:
+    build: ./api
+    ports:
+      - "9000:9000"
+    environment:
+      - MONGO_URI=mongodb://user:pass@mongodb:27017
+      - MONGO_DB=eventmap
+    depends_on:
+      - mongodb
+    volumes:
+      - ./api:/app
+      - api_static:/app/static
+
+  front:
+    build: ./front
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://api:9000
+    depends_on:
+      - api
+    volumes:
+      - ./front/src:/app/src
+
+volumes:
+  db:
+  api_static:

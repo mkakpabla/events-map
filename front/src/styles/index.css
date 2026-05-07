@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.leaflet-container { background: #dde8f0; }
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.14) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+.leaflet-control-zoom a {
+  border-radius: 0 !important;
+  color: #374151 !important;
+  font-weight: 700;
+  font-size: 16px !important;
+}
+
+.cluster-icon {
+  background: #6366f1;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 14px rgba(99,102,241,.5);
+}
+
+/* ── Card hover lift ─────────────────────── */
+.ev-card {
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.ev-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.09);
+}
+
+/* ── Smooth slide-in for list items ─────── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.ev-enter {
+  animation: slideUp .22s ease both;
+}
+
+/* ── Input focus ring ───────────────────── */
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-ring, rgba(99,102,241,.2));
+}
+
+/* ── Button press ───────────────────────── */
+button:active { transform: scale(.97); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
