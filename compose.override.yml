@@ -11,7 +11,5 @@ services:
   front:
     build:
       target: dev
-    environment:
-      - VITE_API_URL=http://api:9000
     volumes:
       - ./front/src:/app/src
