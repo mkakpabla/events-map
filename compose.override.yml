@@ -1,0 +1,17 @@
+# Chargé automatiquement par Docker Compose en développement
+# Pour la prod : docker compose -f compose.yml up
+services:
+  api:
+    build:
+      target: dev
+    volumes:
+      - ./api:/app
+      - api_static:/app/static
+
+  front:
+    build:
+      target: dev
+    environment:
+      - VITE_API_URL=http://api:9000
+    volumes:
+      - ./front/src:/app/src

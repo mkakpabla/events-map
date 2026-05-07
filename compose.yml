@@ -31,19 +31,14 @@ services:
     depends_on:
       - mongodb
     volumes:
-      - ./api:/app
       - api_static:/app/static
 
   front:
     build: ./front
     ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://api:9000
+      - "4173:4173"
     depends_on:
       - api
-    volumes:
-      - ./front/src:/app/src
 
 volumes:
   db:
