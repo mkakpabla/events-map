@@ -6,7 +6,7 @@ import { EVENT_TYPES, THEMES } from '../data/constants.js'
 import { formatDate } from '../utils/helpers.js'
 import { useNearbyEvents } from '../hooks/useEvents.js'
 
-export default function VariantB({ theme, compact, showTypes, popupDesign }) {
+export default function VariantB({ theme, showTypes, popupDesign }) {
   const th = THEMES[theme]
   const [search, setSearch]           = useState('')
   const [activeTypes, setActiveTypes] = useState([])
