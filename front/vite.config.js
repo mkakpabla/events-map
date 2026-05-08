@@ -22,9 +22,7 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
 
-    allowedHosts: [
-      'event-map.68.183.132.93.nip.io',
-    ],
+    allowedHosts: true,
 
     proxy: {
       '/api': {
