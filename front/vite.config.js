@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 
 const API_TARGET = process.env.VITE_API_URL || 'http://api:9000'
 
+console.log(`API target: ${API_TARGET}`)
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -14,8 +16,9 @@ export default defineConfig({
 
     proxy: {
       '/api': {
-        target: API_TARGET,
+        target: "https://api.68.183.132.93.nip.io",
         changeOrigin: true,
+        secure: false,
       },
     },
   },
@@ -29,8 +32,9 @@ export default defineConfig({
 
     proxy: {
       '/api': {
-        target: API_TARGET,
+        target: "https://api.68.183.132.93.nip.io/",
         changeOrigin: true,
+        secure: false,
       },
     },
   },
