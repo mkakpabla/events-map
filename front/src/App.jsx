@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import VariantA from './variants/VariantA.jsx'
+import VariantB from './variants/VariantB.jsx'
+import VariantC from './variants/VariantC.jsx'
 import TweaksPanel from './components/TweaksPanel.jsx'
 import { TWEAK_DEFAULTS } from './data/constants.js'
 
@@ -37,7 +39,9 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <VariantA {...variantProps} />
+      {tweaks.variant === 'A' && <VariantA {...variantProps} />}
+      {tweaks.variant === 'B' && <VariantB {...variantProps} />}
+      {tweaks.variant === 'C' && <VariantC {...variantProps} />}
       <TweaksPanel tweaks={tweaks} onChange={onChange} visible={tweaksVisible} onClose={close} />
     </div>
   )
