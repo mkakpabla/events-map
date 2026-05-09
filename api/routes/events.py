@@ -103,7 +103,7 @@ async def get_event(event_id: str):
     doc = await db["events"].find_one({"_id": ObjectId(event_id)})
 
     if not doc:
-        raise HTTPException(status_code=404, detail="Not found")
+        raise HTTPException(status_code=404, detail="Event Not found")
 
     return EventOut(**doc_to_event(doc))
 
