@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import VariantA from './variants/VariantA.jsx'
-import VariantB from './variants/VariantB.jsx'
-import VariantC from './variants/VariantC.jsx'
 import TweaksPanel from './components/TweaksPanel.jsx'
 import { TWEAK_DEFAULTS } from './data/constants.js'
 
