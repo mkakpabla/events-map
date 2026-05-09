@@ -5,6 +5,8 @@ on:
     branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
+permissions:
+  contents: write
 
 jobs:
   front-quality:
@@ -241,22 +243,36 @@ jobs:
           ls -al
           sed -i "s|image: ghcr.io/mkakpabla/event-map-front:.*$|image: \"ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}\"|" templates/front/deployment.yaml
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITOPS_TOKEN }}
-          commit-message: "chore: update event-map-front to ${{ steps.short-sha.outputs.sha }}"
-          branch: deploy/event-map-front-${{ steps.short-sha.outputs.sha }}
-          title: "deploy: event-map-front → ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}"
-          body: |
-            Promotion automatique de l'image `event-map-front`.
+      - name: Configure git identity
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
 
-            | Champ | Valeur |
-            |-------|--------|
-            | Image | `ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}` |
-            | Dépôt source | `${{ github.repository }}` |
-            | Commit | `${{ github.sha }}` |
-            | Run | `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}` |
-          base: main
-          delete-branch: true
+      - name: Commit and push branch
+        run: |
+          git checkout -b deploy/event-map-front-${{ steps.short-sha.outputs.sha }}
+          git add templates/front/deployment.yaml
+          git commit -m "chore: update event-map-front to ${{ steps.short-sha.outputs.sha }}"
+          git push origin deploy/event-map-front-${{ steps.short-sha.outputs.sha }}
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+        run: |
+          gh pr create \
+            --repo mkakpabla/cncf_gitops_argocd \
+            --base main \
+            --head deploy/event-map-front-${{ steps.short-sha.outputs.sha }} \
+            --title "deploy: event-map-front → ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}" \
+            --body "$(cat <<'EOF'
+          Promotion automatique de l'image \`event-map-front\`.
+
+          | Champ | Valeur |
+          |-------|--------|
+          | Image | \`ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}\` |
+          | Dépôt source | \`${{ github.repository }}\` |
+          | Commit | \`${{ github.sha }}\` |
+          | Run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+          EOF
+          )"
 
