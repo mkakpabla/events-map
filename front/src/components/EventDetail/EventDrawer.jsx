@@ -190,7 +190,7 @@ export default function EventDrawer({ ev, onClose, theme }) {
                 borderBottom: `1.5px solid ${th.accent}50`,
               }}
             >
-              Voir l'événement
+              Voir l'événement update
               <Icon name="chevronRight" size={12} color={th.accent} />
             </a>
           )}
