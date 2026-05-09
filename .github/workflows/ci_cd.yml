@@ -226,8 +226,36 @@ jobs:
       name: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'staging' }}
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Compute short SHA
+        id: short-sha
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
-      - name: Deploy Front
-        run: echo "TODO — deploy Front to ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'staging' }}"
+      - name: Checkout GitOps repo
+        uses: actions/checkout@v6
+        with:
+          repository: mkakpabla/cncf_gitops_argocd
+          token: ${{ secrets.GITOPS_TOKEN }}
+
+      - name: Update image tag in deployment.yaml
+        run: |
+          sed -i "s|image: ghcr.io/mkakpabla/event-map-front:.*|image: ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}|" deployment.yaml
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITOPS_TOKEN }}
+          commit-message: "chore: update event-map-front to ${{ steps.short-sha.outputs.sha }}"
+          branch: deploy/event-map-front-${{ steps.short-sha.outputs.sha }}
+          title: "deploy: event-map-front → ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}"
+          body: |
+            Promotion automatique de l'image `event-map-front`.
+
+            | Champ | Valeur |
+            |-------|--------|
+            | Image | `ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}` |
+            | Dépôt source | `${{ github.repository }}` |
+            | Commit | `${{ github.sha }}` |
+            | Run | `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}` |
+          base: main
+          delete-branch: true
 

@@ -36,7 +36,7 @@ services:
   front:
     build: ./front
     ports:
-      - "4173:4173"
+      - "4173:5173"
     depends_on:
       - api
 

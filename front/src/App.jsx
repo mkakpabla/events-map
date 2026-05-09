@@ -39,9 +39,7 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      {tweaks.variant === 'A' && <VariantA {...variantProps} />}
-      {tweaks.variant === 'B' && <VariantB {...variantProps} />}
-      {tweaks.variant === 'C' && <VariantC {...variantProps} />}
+      <VariantA {...variantProps} />
       <TweaksPanel tweaks={tweaks} onChange={onChange} visible={tweaksVisible} onClose={close} />
     </div>
   )
