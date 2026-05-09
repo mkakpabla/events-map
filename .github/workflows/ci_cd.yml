@@ -239,7 +239,7 @@ jobs:
       - name: Update image tag in deployment.yaml
         run: |
           ls -al
-          sed -i "s|image: ghcr.io/mkakpabla/event-map-front:.*$|image: \"ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}\"|" front/deployment.yaml
+          sed -i "s|image: ghcr.io/mkakpabla/event-map-front:.*$|image: \"ghcr.io/mkakpabla/event-map-front:${{ steps.short-sha.outputs.sha }}\"|" templates/front/deployment.yaml
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
